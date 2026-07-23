@@ -40,4 +40,4 @@ logic signed [ACC_WIDTH-1:0] mem_c [0:N-1][0:N-1];
   assign a_data = mem_a[rd_row_a][rd_col_a];
   assign b_data = mem_b[rd_row_b][rd_col_b];
   assign c_data_out = mem_c[rd_row_c][rd_col_c];
-endmodule : registers
+endmodule 
