@@ -16,5 +16,26 @@ import matrix_pkg::*;
 logic signed [DATA_WIDTH-1:0] mem_a[0:N-1][0:N-1];
 logic signed [DATA_WIDTH-1:0] mem_b [0:N-1][0:N-1];
 logic signed [ACC_WIDTH-1:0] mem_c [0:N-1][0:N-1];
+  always_ff @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+      for (int r = 0; r < N; r++) begin
+        for (int c = 0; c < N; c++) begin
+          mem_a[r][c] <= '0;
+          mem_b[r][c] <= '0;
+          mem_c[r][c] <= '0;
+     end
+   end
+ end
+ else begin
+    if (load_en) begin
+       if (!load_sel)
+          mem_a[load_row][load_col] <= load_data;
+      else
+          mem_b[load_row][load_col] <= load_data;
+      end
+      if (c_wr_en)
+        mem_c[c_row][c_col] <= c_data;
+    end
+  end
     
 endmodule
