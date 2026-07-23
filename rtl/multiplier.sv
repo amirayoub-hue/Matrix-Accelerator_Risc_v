@@ -6,3 +6,19 @@ module multiplier
     output logic signed [PROD_WIDTH-1:0] prod_out ,
     output logic  prod_valid 
   );
+  always_ff @(posedge clk or  negedge rst_n)begin 
+    if(!rst_n)begin 
+      prod_out  <= '0;
+      prod_valid <= 1'b0;
+    end
+    else begin
+      if(mul_en)begin 
+        prod_out <= a_in * b_in;
+        prod_valid <= 1'b1;
+      end
+      else begin
+        prod_valid <= 1'b0;
+      end
+    end
+  end
+endmodule
