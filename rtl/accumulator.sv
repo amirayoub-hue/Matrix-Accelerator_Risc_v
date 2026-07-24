@@ -1,4 +1,4 @@
-module accumulater
+module accumulator
 import matrix_pkg :: *;
 (
    input logic clk ,rst_n, acc_clear,acc_en ,
