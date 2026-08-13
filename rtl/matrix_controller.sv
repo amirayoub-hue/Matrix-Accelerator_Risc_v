@@ -56,6 +56,67 @@ always_comb begin
     done      = 1'b0;
 
     unique case (state)
+           S_IDLE:begin 
+      if(start)begin
+        i_n       = '0;
+        j_n       = '0;
+        k_n       = '0;
+        acc_clear = 1'b1;  
+        state_n   = S_LOAD;
+      end
+    end
+
+    S_LOAD:begin 
+        state_n = S_MUL ;
+    end
+
+    S_MUL:begin
+        mul_en =1'b1;
+        state_n = S_ACC;
+    end  
+
+    S_ACC:begin 
+        acc_en  = 1'b1;
+        state_n = S_STORE;
+    end  
+
+    S_STORE:begin 
+        if(k_idx == IDX_WIDTH'(N-1))begin
+             c_wr_en = 1'b1;  
+         end
+         state_n =S_NEXT;
+    end  
+
+    S_NEXT:begin
+        if(k_idx != IDX_WIDTH'(N-1))begin
+          k_n     = k_idx + 1'b1;
+          state_n = S_LOAD; 
+        end
+        else begin
+          acc_clear = 1'b1;
+          k_n       = '0;
+          if(j_idx != IDX_WIDTH'(N-1))begin
+            j_n     = j_idx + 1'b1;
+            state_n = S_LOAD;
+          end
+          else if(i_idx != IDX_WIDTH'(N-1))begin
+            i_n     = i_idx + 1'b1;
+            j_n     = '0;
+            state_n = S_LOAD;
+          end
+          else begin
+            state_n = S_DONE ;
+           end
+        end
+     end 
+
+    S_DONE:begin
+        done = 1'b1;
+        if(!start)
+        state_n = S_IDLE ;
+     end
+
+        default: state_n = S_IDLE ;
     endcase
 end
 endmodule 
